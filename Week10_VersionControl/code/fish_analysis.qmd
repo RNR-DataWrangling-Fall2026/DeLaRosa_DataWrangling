@@ -56,3 +56,8 @@ write_csv(fish_data_new, "../data/fish_data_new.csv")
 
 #commit this change to version control and make use it is now in github 
 ```
+
+```{r}
+ggplot(fish_data, aes(x = scalelength)) +
+  geom_histogram()
+```
