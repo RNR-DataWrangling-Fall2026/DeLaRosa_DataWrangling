@@ -5,7 +5,11 @@ format: gfm
 editor: visual
 ---
 
+# Week 10 Assignment: 
+
 ## Fish Scale Analysis
+
+### Problem 2:
 
 Load the tidyverse and the dataset.
 
@@ -36,4 +40,17 @@ fish_data |>
             max_scale_length = max(scalelength, na.rm = T),
             mean_scale_length = mean(scalelength, na.rm = T))
 
+```
+
+### Problem 3: 
+
+```{r}
+# comitting multiple files
+# creaye a new data frame that does not include fish w/ scale lengths less than 1mm from fish_data. will have 4,029 rows
+
+fish_data_new <- fish_data |> 
+  filter(scalelength >= 1)
+fish_data_new 
+
+write_csv(fish_data_new, "../data/fish_data_new.csv")
 ```
