@@ -18,7 +18,7 @@ library(tidyverse)
 fish_data <- read_csv("../data/Gaeta_etal_CLC_data.csv")
 ```
 
-Observe the dataset.
+Observe the dataset using head() and names()
 
 ```{r}
 head(fish_data)
@@ -26,11 +26,14 @@ names(fish_data)
 
 ```
 
-Summary statistics for fish scale length
+Summary statistics for fish scale length:
+
+using summarize() to get the min, max, and average of scale length
 
 ```{r}
 fish_data |> 
   summarize(min_scale_length = min(scalelength, na.rn = T),
             max_scale_length = max(scalelength, na.rm = T),
             mean_scale_length = mean(scalelength, na.rm = T))
+
 ```
