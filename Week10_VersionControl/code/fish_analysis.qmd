@@ -1,0 +1,35 @@
+---
+title: "Week10: Fish Analysis"
+author: "Cielo De La Rosa"
+format: gfm
+editor: visual
+---
+
+## Fish Scale Analysis
+
+Load the tidyverse and the dataset.
+
+```{r}
+# install.packages("tidyverse")
+library(tidyverse)
+
+# read in dataset
+
+fish_data <- read_csv("../data/Gaeta_etal_CLC_data.csv")
+```
+
+Observe the dataset.
+
+```{r}
+head(fish_data)
+names(fish_data) 
+
+```
+
+Summary statistics for fish scale length
+
+```{r}
+fish_data |> 
+  summarize(min_scale_length = min(scalelength, na.rn = T),
+            max_scale_length = max(scalelength, na.rm = T))
+```
