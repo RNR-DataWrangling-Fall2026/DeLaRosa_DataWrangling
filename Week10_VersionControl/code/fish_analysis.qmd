@@ -5,10 +5,6 @@ format: gfm
 editor: visual
 ---
 
-# Week 10 Assignment: 
-
-## Fish Scale Analysis
-
 ### Problem 2:
 
 Load the tidyverse and the dataset.
@@ -42,7 +38,7 @@ fish_data |>
 
 ```
 
-### Problem 3: 
+### Problem 3:
 
 ```{r}
 # comitting multiple files
@@ -60,4 +56,17 @@ write_csv(fish_data_new, "../data/fish_data_new.csv")
 ```{r}
 ggplot(fish_data, aes(x = scalelength)) +
   geom_histogram()
+
+# 4. modify code to look at narrower range of scale size classes by setting the bins argument to 80.
+scale_hist_by_length <- ggplot(fish_data, aes(x = scalelength)) +
+  geom_histogram(bins = 80) +
+  labs(x = "Scale Length (mm)", y = "Frequency") +
+  theme_classic()
+# 5. save changes to code 
+scale_hist_by_length
+
+# 5. save this new plot using ggsave() 
+ggsave("scale_hist_by_length.png", 
+       plot = scale_hist_by_length,
+       path = "../plots")
 ```
