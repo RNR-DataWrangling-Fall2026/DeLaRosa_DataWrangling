@@ -251,22 +251,33 @@ a.  Write a function takes two arguments: (1) a data frame with a `count` column
     Save your plot as a .png file using `ggsave()` in the appropriate sub-directory.
 
     ```{r}
-    # 5a. write function 
+    # 6a. write function 
     # shrub_dimensions <- data.frame(length = lengths, 
                                    #width = widths, 
                                    #height = heights) 
     count_data_2 <- data.frame(count = count, 
                               area = area)
 
+    ggsave()
     ```
 
 b.  Use the function from (a) to make a scatter plot of count as a function of area for the `count_data` data frame with the points colored by the `site` column.
 
     Save your plot as a .png file using `ggsave()` in the appropriate sub-directory.
 
+    ```{r}
+    # 6. make a scatterplot of count as a function of area for count_data w/ points colored by site col
+
+    # save plot as .png in figures folder 
+    ```
+
 c.  Create a new function based on the function you created in (a); in this new function, allow the x and y axes to be any column in the data frame, specified as arguments in the function. This means you will also need to be able to specify the axis label names; in total, your function will need six different arguments!
 
     Remake the same plot as from (b) using your new function. Save your plot as a .png file using `ggsave()` in the appropriate sub-directory.
+
+```{r}
+# 5c. create a new function based on the function from a, allowing x and y axes to be any column in df 
+```
 
 ### 7. Portal Species Time-Series Challenge (OPTIONAL)
 
