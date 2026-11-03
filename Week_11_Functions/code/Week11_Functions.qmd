@@ -46,7 +46,10 @@ The braces indicate that the lines of code are a group that gets run together.
 Let's write out our first function. We want to calculate shrub volumes.
 
 ```{r}
-
+calc_shrub_vol <- function(length, width, height){
+  volume <- length * width * height 
+  return(volume)
+}
 ```
 
 It is important to note that writing the function does not create the function. We have to remember to run the code to create the function and add it to our environment.
@@ -56,13 +59,14 @@ When we run this code chunk above, we can see that the function gets added to ou
 Let's use our new function.
 
 ```{r}
-
+calc_shrub_vol(0.8, 1.6, 2)
+#multiplies three values together returning volume
 ```
 
 As with other functions, we can store the output as an object to use later.
 
 ```{r}
-
+shrub_vol <- calc_shrub_vol(0.8, 1.6, 2)
 ```
 
 #### Let's Practice!
@@ -94,7 +98,14 @@ As with many of the functions that we have already used in this class, we can se
 For example, if many of our shrubs are the same height, we could specify that the default height should be 1.
 
 ```{r}
+est_shrub_mass <- function(volume, a = 2.65, b = 0.8){
+  mass <- a * volume ^ b 
+  return(mass)
+} 
 
+# check it works 
+# with volume of 7.2 
+est_shrub_mass(7.2)
 ```
 
 ### When do we use argument names?
@@ -104,7 +115,17 @@ While you don't always have to name the arguments you are specifying, there are 
 As we saw above, as long as you specify arguments in the correct order, they do not need to be named. On the other hand, if you specify arguments out of the order in which they are written into the function or you are skipping some arguments (using the default) and then specifying later arguments, it is necessary to name them.
 
 ```{r}
+# volume = 7.2 , a = 2.65, b = 0.8 
+est_shrub_mass(7.2, 2.65, 0.8)
 
+# will still run but not correct
+est_shrub_mass(2.65, 0.8) 
+
+est_shrub_mass(2.65, b = 0.8)  
+
+# name arguments, put in any order 
+# must assign values to variable 
+est_shrub_mass(b = 0.8, volume = 7.2)
 ```
 
 With some complicated functions, the order of the arguments is often challenging to remember, so using names by default is a good idea.
@@ -134,7 +155,7 @@ shrub_dimensions <- data.frame(length = lengths,
                                width = widths, 
                                height = heights)
 
-calc_shrub_vol(shrub_dimensions$length,
+shrub_dimensions$volume <- calc_shrub_vol(shrub_dimensions$length,
                shrub_dimensions$width,
                shrub_dimensions$height)
 ```
