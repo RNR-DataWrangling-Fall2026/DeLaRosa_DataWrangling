@@ -91,6 +91,7 @@ c.  Write a function named `double` that takes a number as input and outputs tha
 d.  Write a function named `prediction` that takes three arguments, `x`, `a`, and `b`, and returns `y`. Use the following equation `a + b * x` (like a prediction from a simple linear model). Run it with `x` = 12, `a` = 6, and `b` = 0.8.
 
 ```{r}
+# d 
 prediction <- function(x, a, b){
   y <- a + b * x
   return(y)
@@ -176,8 +177,8 @@ c.  The function in (b) assumes that the weight is provided in grams. Use the fu
 
 ```{r}
 # 3c. use function from a and b to estimate the height for an animal that weighs 2 lbs using the default value for a, changing to b = 0.32
-convert_pounds_to_grams(2) 
-get_height_from_weight(907.2, b = 0.32)
+convert_pounds_to_grams(2) |> 
+get_height_from_weight(b = 0.32)
 ```
 
 ### 4. Default Arguments (15 points)
@@ -263,7 +264,7 @@ a.  Write a function takes two arguments: (1) a data frame with a `count` column
     plot_function(count_data, state)
     #save plot    
     area_state_plot <- plot_function(count_data, state)
-    ggsave("area_state_plot.png", plot = area_plot, path = "../images" )
+    ggsave("area_state_plot.png", plot = area_state_plot, path = "../images" )
     ```
 
 b.  Use the function from (a) to make a scatter plot of count as a function of area for the `count_data` data frame with the points colored by the `site` column.
