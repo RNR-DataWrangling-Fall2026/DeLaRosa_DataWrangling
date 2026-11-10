@@ -1,9 +1,25 @@
 # RNR 537 Data Wrangling
+
 github repo for remainder of Fall 2026 RNR 537
 
-DeLaRosa_DataWrangling 
+DeLaRosa_DataWrangling
 
- > Week_11_Functions
-      >code 
-        >>assignment.qmd
-  
+Folder Organization
+
+Week 10: Version Control
+
+- plots: contains plot images
+
+- data_raw: empty
+
+- data: contains csv
+
+code: assignment files
+
+Week 11: Functions
+
+- images: empty
+
+- figures: contains plots
+
+- code: contains assignment files

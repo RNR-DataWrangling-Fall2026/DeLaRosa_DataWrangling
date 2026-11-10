@@ -136,7 +136,7 @@ Similarly, when there are lots of optional arguments, you will often need to nam
 
 ```
 
-##  Vectors and Data Frames
+## Vectors and Data Frames
 
 What if, instead of single values, we have a series of vectors or columns in data frame? Those will work!
 
