@@ -14,7 +14,7 @@ Week 10: Version Control
 
 - data: contains csv
 
-code: assignment files
+- code: assignment files
 
 Week 11: Functions
 
