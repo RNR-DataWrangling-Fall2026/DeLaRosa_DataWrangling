@@ -18,7 +18,7 @@ code: assignment files
 
 Week 11: Functions
 
-- images: empty
+- images: image from lesson
 
 - figures: contains plots
 
