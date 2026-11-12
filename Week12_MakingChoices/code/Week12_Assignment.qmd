@@ -132,16 +132,45 @@ pie_crab |>
 a.  Complete the following `if` statement so that if `age_class` is equal to "sapling" it sets `y` to 10, if `age_class` is equal to "seedling" it sets `y` to 5, and if `age_class` is something else it sets `y` to 0.
 
 ```{r}
-age_class <- "adult"
-if (){
 
-}
-y
+# 3a. if age_class is sampling set y to 10, if seedling set y to 5, everything else to 0 
+
+age_class <- "adult" 
+# age_class <- "seedling"
+# age_class <- "sapling"
+
+if (age_class == "sapling"){
+  y <- 10
+} else if (age_class == "seedling"){ 
+  y <-  5} else {
+    y <-  0
+  }
+y # returns 0 when age_class is adult 
 ```
 
 b.  Convert your conditional statement from (a) into a function that takes `age_class` as an argument and returns `y`. Call this function 5 times, once with each of the following values for `age_class`: "sapling", "seedling", "adult", "mature", "established".
 
 c.  Write a function called `predict_value` that takes a single argument `x`. If `x` is greater than 0 and less than 15, return `y = 6 + 0.8 * x`. If `x` is greater than or equal to 15 and less than 30, return `y = 5 + 0.75 * x`. In all other cases, return `y = NA`. Call the function three times, with `5`, `26`, and `-2` as the input.
+
+```{r}
+# 3b. 
+age_function <- function(age_class) {
+  if (age_class == "sapling") {
+    y <- 10 
+  } else if (age_class == "seedling") {
+    y <- 5
+  } else {
+    y <- 0
+  }
+  return(y)
+}
+
+age_function("sapling") 
+age_function("seedling")
+age_function("adult") 
+age_function("mature")
+age_function("established")
+```
 
 ### 4. Size Estimates by Name (20 points)
 
