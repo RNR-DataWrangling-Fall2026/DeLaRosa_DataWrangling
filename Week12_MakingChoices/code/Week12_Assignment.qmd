@@ -30,6 +30,10 @@ Write R code to successfully answer each question below.
 
 November 17 before class
 
+```{r}
+library(tidyverse)
+```
+
 # Assignment Exercises
 
 ### 1. Choice Operators (10 pts)
@@ -58,7 +62,7 @@ e.  `x` times `w` is between 13.2 and 13.5
 "green" %in% colors 
 
 # 1b. "purple is not in colors
-"purple" %in% colors
+!"purple" %in% colors
 
 # 1c. each value in masses is greater than 40 
 masses > 40 
@@ -69,8 +73,6 @@ w > x | y > z
 # 1e. x times w is between 13.2 and 13.5 
 x*w > 13.2 & x*w <13.5
 
-
-# done 
 ```
 
 ### 2. Using `dplyr` Choice Functions (20 points)
@@ -101,12 +103,29 @@ a.  Take a look at the `pie_crab` dataset from the `lterdatasampler` package by 
     I've placed my new column next to the size column for the sake of the answer key; you don't need to do this.
 
 ```{r}
-# 2c. 
+# 2c.  
+#install.packages(lterdatasampler)
+library(lterdatasampler)
+head(pie_crab)
+
+pie_crab |>  
+  mutate(size_category = if_else(size >= 20, 
+                                 true = "large", 
+                                 false = "small"), 
+         .after = size)
 ```
 
 a.  Now use the `case_when` function inside a `mutate` function to create a new column called `size_category3` in the `pie_crab` data frame that meets the same conditions as (b).
 
     I've placed my new column next to the size column for the sake of the answer key; you don't need to do this.
+
+```{r}
+pie_crab |> 
+  mutate(size_category3 = case_when(size >=20 ~ "large", 
+                                    size >=10 & size < 20 ~ "medium", 
+                                    size < 10 ~ "small"),
+         .after = size)
+```
 
 ### 3. If/Else Statements (20 points)
 
