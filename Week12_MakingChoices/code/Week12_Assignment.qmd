@@ -153,7 +153,7 @@ b.  Convert your conditional statement from (a) into a function that takes `age_
 c.  Write a function called `predict_value` that takes a single argument `x`. If `x` is greater than 0 and less than 15, return `y = 6 + 0.8 * x`. If `x` is greater than or equal to 15 and less than 30, return `y = 5 + 0.75 * x`. In all other cases, return `y = NA`. Call the function three times, with `5`, `26`, and `-2` as the input.
 
 ```{r}
-# 3b. 
+# 3b. make function using statement from a 
 age_function <- function(age_class) {
   if (age_class == "sapling") {
     y <- 10 
@@ -170,6 +170,25 @@ age_function("seedling")
 age_function("adult") 
 age_function("mature")
 age_function("established")
+
+```
+
+```{r}
+# 3c. make function w/ a single argument x. If x is greater than 0 and less than 15, return y = 6 + 0.8 * x. If x is greater than or equal to 15 and less than 30, return y = 5 + 0.75 * x. In all other cases, return y = NA. 
+
+predict_value <- function(x) {
+  if (x > 0 & x < 15) { 
+    y = 6 + 0.8 * x
+  } else if ( x >= 15 & x < 30) { 
+    y = 5 + 0.75 * x 
+  } else { y = NA 
+  } 
+  return(y)
+}
+
+predict_value(5) 
+predict_value(26) 
+predict_value(-2)
 ```
 
 ### 4. Size Estimates by Name (20 points)
@@ -206,13 +225,36 @@ d.  An *Ankylosauria* that is 13 meters long.
 Hint: you can put an `if`-`else` statement inside another `if` statement, like this:
 
 ```{r eval=FALSE}
-if (name == "Stegosauria") {
-  if (length > 8) {
-    # one set of a and b values
-  } else {
-    # another set of a and b values
-  }
-} else if ...
+get_mass_from_length_by_name <- function(length, name) { 
+  if (name == "Stegosauria") { 
+    if (length > 8) { 
+      mass <-  10.95 * length ^ 2.64 
+      } else { 
+        mass <-  8.5 * length ^ 2.8 
+      }
+  } else if (name == "Theropoda") { 
+    mass <- 0.73 * length ^ 3.63 
+  } else if (name == "Sauropoda") { 
+    mass <- 214.44 * length ^ 1.46
+  } else { 
+    mass <- NA 
+  } 
+  return(mass)
+} 
+
+# A Stegosauria that is 10 meters long.
+get_mass_from_length_by_name(10,"Stegosauria")
+# A Theropoda that is 8 meters long.
+get_mass_from_length_by_name(8, "Theropoda")
+# A Sauropoda that is 12 meters long.
+get_mass_from_length_by_name(12, "Sauropoda")
+# An Ankylosauria that is 13 meters long. 
+get_mass_from_length_by_name(13, "Ankylosauria")
+
+
+# optional challenge 2 
+# Stegosauria that is 6 meters long
+get_mass_from_length_by_name(6, "Stegosauria")
 ```
 
 ### 5. Putting It All Together: Portal Rodents (30 points)
