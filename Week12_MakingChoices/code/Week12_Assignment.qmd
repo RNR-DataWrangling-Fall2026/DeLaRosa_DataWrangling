@@ -264,10 +264,13 @@ In this question, you will combine choice functions with joins, strings, and plo
 Download the following Portal data tables using code below (modify the `destfile` arguments to point to the correct sub-directory) to get started.
 
 ```{r}
-# download.file(url = "https://ndownloader.figshare.com/files/2292172",
-#   destfile = "surveys.csv")
-# download.file(url = "https://ndownloader.figshare.com/files/3299483",
-#   destfile = "species.csv")
+download.file(url = "https://ndownloader.figshare.com/files/2292172", destfile = "code/surveys.csv")
+download.file(url = "https://ndownloader.figshare.com/files/3299483",
+   destfile = "code/species.csv")
+getwd()
+setwd()
+setwd("..")
+dir.exists("code")
 ```
 
 a.  Join `surveys` and `species` together so that each survey record has the genus, species, and taxa information. Keep only rodents (`taxa` is "Rodent"). Then, use a `stringr` function to add a column called `scientific_name` that combines `genus` and `species` with a space between them (e.g., "Dipodomys merriami"). Save the result as an object called `rodents`.
@@ -292,6 +295,13 @@ d.  Use `case_when` inside a `mutate` to add a column called `weight_class` with
 e.  Using `rodents`, remove the individuals with an "unknown" weight class and count the number of individuals in each `year`, `season`, and `weight_class`. Then, make a line plot with `year` on the x-axis, the count on the y-axis, lines colored by `weight_class`, and a separate panel for each `season`. Give your plot informative axis labels and use a theme of your choice.
 
     In a sentence or two, describe one pattern you see in the plot.
+
+```{r}
+# 5a. Join surveys and species together so that each survey record has the genus, species, and taxa information. Keep only rodents (taxa is "Rodent"). Then, use a stringr function to add a column called scientific_name that combines genus and species with a space between them (e.g., "Dipodomys merriami"). Save the result as an object called rodents.
+
+surveys <- read_csv("surveys.csv") 
+species <- read_csv("species.csv")
+```
 
 ### 6. Challenge: A "Safe" Tidyverse Function (OPTIONAL)
 
