@@ -23,3 +23,9 @@ Week 11: Functions
 - figures: contains plots
 
 - code: contains assignment files
+
+Week 12: Making Choices
+
+- code: contains assignment
+
+- data: contains csv files
