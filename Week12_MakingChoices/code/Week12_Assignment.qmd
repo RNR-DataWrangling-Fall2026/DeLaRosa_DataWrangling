@@ -106,7 +106,7 @@ a.  Take a look at the `pie_crab` dataset from the `lterdatasampler` package by 
 # 2c.  
 #install.packages(lterdatasampler)
 library(lterdatasampler)
-head(pie_crab)
+# head(pie_crab)
 
 pie_crab |>  
   mutate(size_category = if_else(size >= 20, 
@@ -120,6 +120,7 @@ a.  Now use the `case_when` function inside a `mutate` function to create a new 
     I've placed my new column next to the size column for the sake of the answer key; you don't need to do this.
 
 ```{r}
+# 2d. 
 pie_crab |> 
   mutate(size_category3 = case_when(size >=20 ~ "large", 
                                     size >=10 & size < 20 ~ "medium", 
@@ -132,7 +133,6 @@ pie_crab |>
 a.  Complete the following `if` statement so that if `age_class` is equal to "sapling" it sets `y` to 10, if `age_class` is equal to "seedling" it sets `y` to 5, and if `age_class` is something else it sets `y` to 0.
 
 ```{r}
-
 # 3a. if age_class is sampling set y to 10, if seedling set y to 5, everything else to 0 
 
 age_class <- "adult" 
@@ -224,7 +224,7 @@ d.  An *Ankylosauria* that is 13 meters long.
 
 Hint: you can put an `if`-`else` statement inside another `if` statement, like this:
 
-```{r eval=FALSE}
+```{r}
 get_mass_from_length_by_name <- function(length, name) { 
   if (name == "Stegosauria") { 
     if (length > 8) { 
@@ -243,13 +243,16 @@ get_mass_from_length_by_name <- function(length, name) {
 } 
 
 # A Stegosauria that is 10 meters long.
-get_mass_from_length_by_name(10,"Stegosauria")
+get_mass_from_length_by_name(10,"Stegosauria") 
+
 # A Theropoda that is 8 meters long.
 get_mass_from_length_by_name(8, "Theropoda")
+
 # A Sauropoda that is 12 meters long.
 get_mass_from_length_by_name(12, "Sauropoda")
+
 # An Ankylosauria that is 13 meters long. 
-get_mass_from_length_by_name(13, "Ankylosauria")
+get_mass_from_length_by_name(13, "Ankylosauria") 
 
 
 # optional challenge 2 
@@ -264,13 +267,13 @@ In this question, you will combine choice functions with joins, strings, and plo
 Download the following Portal data tables using code below (modify the `destfile` arguments to point to the correct sub-directory) to get started.
 
 ```{r}
-download.file(url = "https://ndownloader.figshare.com/files/2292172", destfile = "code/surveys.csv")
+download.file(url = "https://ndownloader.figshare.com/files/2292172", destfile = "../data/surveys.csv")
 download.file(url = "https://ndownloader.figshare.com/files/3299483",
-   destfile = "code/species.csv")
-getwd()
-setwd()
-setwd("..")
-dir.exists("code")
+   destfile = "../data/species.csv")
+
+# load in data 
+surveys <- read_csv("../data/surveys.csv") 
+species <- read_csv("../data/species.csv")
 ```
 
 a.  Join `surveys` and `species` together so that each survey record has the genus, species, and taxa information. Keep only rodents (`taxa` is "Rodent"). Then, use a `stringr` function to add a column called `scientific_name` that combines `genus` and `species` with a space between them (e.g., "Dipodomys merriami"). Save the result as an object called `rodents`.
@@ -292,15 +295,92 @@ d.  Use `case_when` inside a `mutate` to add a column called `weight_class` with
 
     In a sentence or two, answer the following: what would happen to individuals with missing weights if you left out the "unknown" line? Why?
 
+    - If you leave out the "unknown" line, those with NA will be classified as "large" because it lumps it with all the other weights when you used .default =. In order to avoid that, you must designate a category for those rows with NA.
+
 e.  Using `rodents`, remove the individuals with an "unknown" weight class and count the number of individuals in each `year`, `season`, and `weight_class`. Then, make a line plot with `year` on the x-axis, the count on the y-axis, lines colored by `weight_class`, and a separate panel for each `season`. Give your plot informative axis labels and use a theme of your choice.
 
     In a sentence or two, describe one pattern you see in the plot.
 
 ```{r}
-# 5a. Join surveys and species together so that each survey record has the genus, species, and taxa information. Keep only rodents (taxa is "Rodent"). Then, use a stringr function to add a column called scientific_name that combines genus and species with a space between them (e.g., "Dipodomys merriami"). Save the result as an object called rodents.
+# 5a. Join surveys and species together so that each survey record has the genus, species, and taxa information. Keep only rodents (taxa is "Rodent"). Then, use a stringr function to add a column called scientific_name that combines genus and species with a space between them. 
 
-surveys <- read_csv("surveys.csv") 
-species <- read_csv("species.csv")
+rodents <- surveys |> 
+  inner_join(species, by = "species_id") |>  
+  filter(taxa == "Rodent") |> 
+  mutate(scientific_name = str_c(genus, species, sep = " "))
+
+rodents
+
+
+# 5b. Use if_else and str_detect inside a mutate to add a column called id_level that is "genus only" if scientific_name contains "sp." and "species" otherwise. Then use count() to show how many records fall into each id_level. 
+
+rodents |>  
+  mutate(id_level = if_else(str_detect(scientific_name, "sp\\."), 
+                            true = "genus only", 
+                            false = "species"), 
+         .after = scientific_name) |> 
+  count(id_level) 
+# used chatgpt to help with regex, to treat period as period. 
+
+
+# 5c. Use if_else and the %in% operator inside a mutate to add a column called season that is "warm" if the month is April through September (months 4-9) and "cool" if false. 
+
+rodents |> 
+  mutate(season = if_else(month %in% c(4, 5, 6, 7, 8, 9), 
+                                       true = "warm",
+                                       false = "cool"))  
+
+
+# 5d. Use case_when inside a mutate to add a column called weight_class  
+rodents |> 
+  mutate(weight_class = case_when(is.na(weight) ~ "unknown", 
+                                  weight < 20 ~ "small", 
+                                  weight >= 20 & weight < 50 ~ "medium", 
+                                  .default = "large")) |> 
+  count(weight_class)
+
+
+# save b, c, d to rodents 
+rodents <- rodents |>  
+  mutate(id_level = if_else(str_detect(scientific_name, "sp\\."), 
+                            true = "genus only", 
+                            false = "species"), 
+         .after = scientific_name) |>
+  mutate(season = if_else(month %in% c(4, 5, 6, 7, 8, 9), 
+                          true = "warm",
+                          false = "cool")) |>  
+  mutate(weight_class = case_when(weight == "NA" ~ "unknown", 
+                                  weight < 20 ~ "small", 
+                                  weight >= 20 & weight < 50 ~ "medium", 
+                                  .default = "large")) 
+  
+rodents # print new rodents 
+
+
+# In a sentence or two, answer the following: what would happen to individuals with missing weights if you left out the "unknown" line? Why?  
+## If you leave out the "unknown" line, those with NA will be classified as "large" because it lumps it with all the other weights. In order to avoid that, you must designate a category for those rows with NA. 
+
+```
+
+```{r}
+# 5e. Using rodents, remove the individuals with an "unknown" weight class and count the number of individuals in each year, season, and weight_class. Then, make a line plot with year on the x-axis, the count on the y-axis, lines colored by weight_class, and a separate panel for each season. Give your plot informative axis labels and use a theme of your choice.
+
+rodents |> 
+  filter(weight_class != "unknown") |> 
+  count(year, season, weight_class)
+
+
+rodents |> 
+  filter(weight_class != "unknown") |> 
+  count(year, season, weight_class) |> 
+  ggplot(aes(x = year, y = n, color = weight_class)) +
+  geom_line() +
+  labs(x = "Year", y = "Number of Individuals", color = "Weight Class") +
+  facet_wrap(~season) + 
+  theme_classic() 
+
+# In a sentence or two, describe one pattern you see in the plot.
+## Medium weight class has had the most drastic count increase since the beginning of the surveys. There does not seem to be a noticeable seasonal effect 
 ```
 
 ### 6. Challenge: A "Safe" Tidyverse Function (OPTIONAL)
