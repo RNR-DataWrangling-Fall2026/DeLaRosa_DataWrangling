@@ -155,6 +155,53 @@ a.  Use this function and a `for` loop to calculate the estimated mass for each 
 b.  Add the results in the vector back to the original data frame. Show the first few rows of the data frame using `head()`.
 c.  Calculate the mean mass for each `species` using `dplyr` (no `for` loops).
 
+```{r}
+# introduce data
+dino_lengths <- read_csv("../data/dinosaur_lengths.csv")
+# print first 6 rows 
+head(dino_lengths)
+```
+
+```{r}
+# write function that gets mass from length
+mass_from_length_simple <- function(a, b, length) {
+  mass <- a * length ^ b 
+  return(mass)
+} 
+
+# function that takes length and name and returns estimated mass 
+get_mass_from_length <- function(length, species) { 
+  if (species == "Stegosauria") { 
+    if (length > 8) { 
+      mass <-  10.95 * length ^ 2.64 
+    } else { 
+      mass <-  8.5 * length ^ 2.8 
+    }
+  } else if (species == "Theropoda") { 
+    mass <- 0.73 * length ^ 3.63 
+  } else if (species == "Sauropoda") { 
+    mass <- 214.44 * length ^ 1.46
+  } else { 
+    mass <- NA 
+  } 
+  return(mass)
+} 
+```
+
+```{r}
+
+# 2a. use function and for loop to calculate the estimated mass for each dinosaur. store in a vector and show first few items in vector using head() 
+
+head(dino_lengths)
+# create empty vector
+dino_lengths$mass <- NA
+head(dino_lengths)
+for (i in 1:nrow(dino_lengths)) { 
+  dino_lengths$mass <- get_mass_from_length(length = dino_lengths$lengths[i], 
+                                            species = dino_lengths$species[i])
+  }
+```
+
 ### 3. Multi-file Analysis (20 pts)
 
 You have satellite collars on a number of different individuals and want to be able to quickly look at all of their recent movements at once. The data is posted daily to a URL that contains one csv file for each individual: [zip file](http://www.datacarpentry.org/semester-biology/data/individual_collar_data.zip)
