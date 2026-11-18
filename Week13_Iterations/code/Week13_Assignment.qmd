@@ -60,6 +60,7 @@ numbers <- c(1, 2, 3, 4, 5)
 ```
 
 ```{r}
+# 1a. modify to multiply each by 3 
 numbers <- c(1, 2, 3, 4, 5)
 
 for (number in numbers) { 
@@ -71,6 +72,7 @@ for (number in numbers) {
 b.  Write a for loop that loops over the following vector and prints out the mass in kilograms (`mass_kg = mass_lb / 2.2`)
 
 ```{r}
+# 1b. print mass in kg
 mass_lbs <- c(2.2, 3.5, 9.6, 1.2)
 
 for (mass in mass_lbs) {
@@ -87,6 +89,7 @@ c.  Complete the code below so that it prints out the name of each bird one line
 #   print(birds[__])
 # }
 
+# 1c. print out name of each bird 
 birds <- c("robin", "woodpecker", "blue jay", "sparrow")
 for (i in 1:length(birds)){
    print(birds[i])
@@ -96,6 +99,8 @@ for (i in 1:length(birds)){
 d.  Complete the code below so that it stores one area for each radius.
 
 ```{r}
+# 1d. store one area for each radius
+
 radius <- c(1.3, 2.1, 3.5)
 # areas <- vector(_____ = "numeric", length = ______)
 # for (__ in 1:length(________)){
@@ -125,6 +130,8 @@ widths <- c(3.5, 2.4, 2.8)
 #   areas[__] <- lengths[__] * widths[__]
 # }
 # areas 
+
+# 1e. calculate area for each pair and store in vector 
 
 # empty vector
 areas <- vector(length = length(areas))
@@ -163,43 +170,50 @@ head(dino_lengths)
 ```
 
 ```{r}
-# write function that gets mass from length
-mass_from_length_simple <- function(a, b, length) {
-  mass <- a * length ^ b 
-  return(mass)
-} 
-
-# function that takes length and name and returns estimated mass 
+# function that takes length & name, returns estimated mass 
 get_mass_from_length <- function(length, species) { 
   if (species == "Stegosauria") { 
-    if (length > 8) { 
       mass <-  10.95 * length ^ 2.64 
-    } else { 
-      mass <-  8.5 * length ^ 2.8 
-    }
   } else if (species == "Theropoda") { 
     mass <- 0.73 * length ^ 3.63 
   } else if (species == "Sauropoda") { 
     mass <- 214.44 * length ^ 1.46
   } else { 
-    mass <- NA 
+    mass <- 25.37 * length ^ 2.49
   } 
   return(mass)
 } 
 ```
 
 ```{r}
-
 # 2a. use function and for loop to calculate the estimated mass for each dinosaur. store in a vector and show first few items in vector using head() 
 
+# create vector
+dino_mass_calculation <- vector(length = length(dino_lengths))
+  
+# make for loop with function  
+for (i in 1:nrow(dino_lengths)) {
+  dino_mass_calculation[i] <- get_mass_from_length(length = dino_lengths$lengths[i], 
+                                                   species = dino_lengths$species[i])
+}
+
+head(dino_mass_calculation)
+```
+
+```{r}
+# 2b. Add the results in the vector back to the original data frame. Show the first few rows of the data frame using head(). 
+dino_lengths$mass <- dino_mass_calculation
+
+# print first 6 rows 
 head(dino_lengths)
-# create empty vector
-dino_lengths$mass <- NA
-head(dino_lengths)
-for (i in 1:nrow(dino_lengths)) { 
-  dino_lengths$mass <- get_mass_from_length(length = dino_lengths$lengths[i], 
-                                            species = dino_lengths$species[i])
-  }
+
+
+# 2c. Calculate the mean mass for each species using dplyr (no for loops).
+
+dino_lengths |> 
+  group_by(species) |> 
+  summarize(mean_mass = mean(mass, na.rm = T)) 
+
 ```
 
 ### 3. Multi-file Analysis (20 pts)
