@@ -212,8 +212,7 @@ head(dino_lengths)
 
 dino_lengths |> 
   group_by(species) |> 
-  summarize(mean_mass = mean(mass, na.rm = T)) 
-
+  summarize(mean_mass = mean(mass)) 
 ```
 
 ### 3. Multi-file Analysis (20 pts)
