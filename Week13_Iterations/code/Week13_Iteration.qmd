@@ -19,7 +19,7 @@ There are many ways to iterate in R (we will look at a few others at the end of 
 
 ## The `for` Loop
 
-Loops are the fundamental structure for repetition in programming.
+Loops are the fundamentaucture for repetition in programming.
 
 In particular, `for` loops perform the same action for each item in a list of things.
 
@@ -212,6 +212,7 @@ est_biomass(a = data$a,
 We can't pass the vector to the function and get back a vector of results because `if`-`else` statements are not vectorized.
 
 ```{r eval=F}
+data$biomass <- NA
 
 for (i in 1:nrow(data)) {
   data$biomass[i] <- est_biomass(a = data$a[i], 
@@ -261,6 +262,8 @@ Since loops (like functions) have some kind of placeholder in them (such as `i` 
 
 data$biomass <- NA
 
+# broken loop but no error
+# should fill in biomass col w output 
 for (i in 1:nrow(data)){
   if (data$volume[i] < 5) {
     data$biomass[i] <- data$a[i] * data$volume[i] ^ data$b[i]
@@ -270,6 +273,22 @@ for (i in 1:nrow(data)){
 }
 
 data
+
+# set i equal to something, a known value, ex: i = 2 
+# in console set i = 2
+# i <- 2
+# i <- 3 has something to do with the problem 
+
+
+for (i in 1:nrow(data)){
+  if (data$volume[i] < 5) {
+    data$biomass[i] <- data$a[i] * data$volume[i] ^ data$b[i]
+  } else {
+    data$biomass[i] <- NA
+  }
+} # added [i] to last object call
+
+data # fills biomass col now
 ```
 
 If part of your loop is working but another part isn't, find a value (or row) that should trigger the part that isn't working and set the index to that value.
@@ -284,7 +303,10 @@ To demonstrate, let's download some simulated satellite collar data. Make sure y
 
 ```{r}
 download.file("http://www.datacarpentry.org/semester-biology/data/locations.zip",
-              destfile = "../data_raw/locations.zip") # where to put the zip file
+              destfile = "../data/locations.zip") # where to put the zip file 
+
+unzip(zipfile = "../data/locations.zip", 
+      exdir = "../data/")
 ```
 
 Before we can loop through these files, we need to get the names of all of these files. The `list.files()` function will, well, list the files in the directory.
@@ -294,7 +316,10 @@ We want only the data files we downloaded, so we'll add the optional `pattern` a
 The pattern argument can also take regular expressions if you need to be more nuanced about which files to include.
 
 ```{r}
+data_files <- list.files(path = "../data/", 
+                         pattern = "locations.*.txt")
 
+data_files
 ```
 
 ### Storing Loop Results in a Data Frame
@@ -303,13 +328,44 @@ Let's say we want to know the file name, count the number of observations, and g
 
 We would start by creating an empty data frame with `data.frame()`. Each argument is for one column: `column_name = an empty vector of the correct type and length`
 
-```{r}
+\# create empty object
 
+results \<- data.frame(file_name = vector("character", num_files),
+
+count = vector("numeric", num_files),
+
+min_lat = vector("numeric", num_files))
+
+```{r}
+# get number of files
+num_files <- length(data_files)
+
+# create empty object 
+results <- data.frame(file_name = vector("character", num_files), 
+                      count = vector("numeric", num_files), 
+                      min_lat = vector("numeric", num_files)) 
 ```
 
 Then we loop over the files, read each one in, and store the information in the `i`th row of the appropriate column (e.g., `results$count[i]`).
 
 ```{r}
+# write for loop  
+
+for (i in 1:num_files) {
+  # read in file
+  filename <- data_files[i] 
+  locations <- read.csv(paste0("../data/", filename))
+  # read.csv('../data/locations-2016-01-02.txt") 
+  
+  # add info to the results df 
+  results$file_name[i] <- filename
+  results$count[i] <- nrow(locations) 
+  results$min_lat[i] <- min(locations$lat)
+}
+
+i = 2
+
+resultsx
 
 ```
 

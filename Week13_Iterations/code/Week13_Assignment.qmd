@@ -1,6 +1,7 @@
 ---
 title: "Week 13 Assignment"
 date: "`r Sys.Date()`"
+author: Cielo De La Rosa Meza
 format: gfm
 ---
 
@@ -42,6 +43,7 @@ Be sure to load the `tidyverse` to use later in the assignment.
 
 ```{r}
 library(tidyverse)
+library(ggplot2)
 ```
 
 ### 1. For Loop Basics (30 pts)
@@ -217,13 +219,19 @@ dino_lengths |>
 
 ### 3. Multi-file Analysis (20 pts)
 
-You have satellite collars on a number of different individuals and want to be able to quickly look at all of their recent movements at once. The data is posted daily to a URL that contains one csv file for each individual: [zip file](http://www.datacarpentry.org/semester-biology/data/individual_collar_data.zip)
+You have satellite collars on a number of different individuals and want to be able to quickly look at all of their recent movements at once. The data is posted daily to a URL that contains one csv file for each individual: zip file
 
 Start your solution by:
 
 - Download the zip file from the link above. Place the zip file in the appropriate sub-directory, if you have them.
 - Unzip it using the `unzip()` function
 - Obtain a list of all of the files with file names matching the pattern `"collar-data-.*.txt"` (using `list.files()`)
+
+```{r}
+collar_files <- list.files(path = "../data/individual_collar_data/", 
+                           pattern = "collar-data-.*.txt") 
+collar_files 
+```
 
 a.  Use a loop to load each of these files into R and make a line plot (using `geom_path()`) for each file with `long` on the `x` axis and `lat` on the `y` axis.
 
@@ -234,6 +242,61 @@ a.  Use a loop to load each of these files into R and make a line plot (using `g
 b.  Add code to the loop to calculate the minimum and maximum latitude in the file, and store these values, along with the name of the file, in a data frame.
 
     Show the data frame as output.
+
+```{r}
+# 3a. use loop to load each files and make line plot for each 
+
+# get number of files 
+num_collar_files <- length(collar_files)
+
+for (i in 1:num_collar_files) {
+  # read in file 
+  filename <- collar_files[i] 
+  collar_locations <- read.csv(paste0("../data/individual_collar_data/", filename)) 
+  # add plot 
+  plot <- ggplot(collar_locations, aes(x = long, y = lat)) + 
+    geom_path() + 
+    labs(title = filename)
+  # print plot 
+  print(plot)
+}
+
+```
+
+```{r}
+# 3b. Add code to the loop to calculate the minimum and maximum latitude in the file, and store these values, along with the name of the file, in a data frame. Show the data frame as output.
+
+# create empty object 
+collar_data_frame <- data.frame(file_name = vector("character", num_collar_files), 
+                                                   max_lat = vector("numeric", num_collar_files), 
+                                                   min_lat = vector("numeric", num_collar_files), 
+                                observations = vector("numeric", num_collar_files))
+
+collar_data_frame 
+
+# for loop 
+for (i in 1:num_collar_files) {
+  # read in file 
+  filename <- collar_files[i] 
+  collar_locations <- read.csv(paste0("../data/individual_collar_data/", filename)) 
+  # add plot 
+  plot <- ggplot(collar_locations, aes(x = long, y = lat)) + 
+    geom_path() + 
+    labs(title = filename)
+  # print plot 
+  print(plot) 
+  # add info to the df 
+  collar_data_frame$file_name[i] <- filename
+  collar_data_frame$max_lat[i] <- max(collar_locations$lat)
+  collar_data_frame$min_lat[i] <- min(collar_locations$lat)
+  collar_data_frame$observations[i] <- nrow(collar_locations)
+   
+}
+
+# print df 
+
+collar_data_frame
+```
 
 ### 4. DNA or RNA (20 points)
 
@@ -248,6 +311,16 @@ a.  Write a function that determines if a sequence of base pairs is DNA, RNA, or
 ```{r}
 # write your function here
 
+dna_or_rna <- function(sequence) {
+  if (str_detect(sequence, "u")) {
+    result <- "RNA" 
+  } else if (str_detect(sequence, "t")) {
+    result <- "DNA" 
+  } else {
+    result  <- "UNKNOWN"
+  }
+  return(result)
+}
 ```
 
 b.  Use the function to determine the sequence type for the following sequences.
@@ -256,6 +329,11 @@ b.  Use the function to determine the sequence type for the following sequences.
 seq1 <- "ttgaatgccttacaactgatcattacacaggcggcatgaagcaaaaatatactgtgaaccaatgcaggcg"
 seq2 <- "gauuauuccccacaaagggagugggauuaggagcugcaucauuuacaagagcagaauguuucaaaugcau"
 seq3 <- "gaaagcaagaaaaggcaggcgaggaagggaagaagggggggaaacc"
+
+
+dna_or_rna(seq1)
+dna_or_rna(seq2)
+dna_or_rna(seq3)
 ```
 
 Before tackling the next questions (c-g), run the following code chunk to create a vector called sequences.
@@ -276,7 +354,64 @@ e.  This time, instead of using the function, place the `if`-`else` portion of y
 
 f.  OPTIONAL: Use the function and `sapply` to create a vector of sequence types for the values in sequences
 
-g.  OPTIONAL: Use the function, and `mutate()` to create a data frame that includes a column of sequences and a column of their types. First, run the following line of code to turn the sequence vector into a dataframe.
+g.  OPTIONAL: Use the function, and `mutate()` to create a data frame that includes a column of sequences and a column of their types. First, run the following line of code to turn the sequence vector into a data frame.
+
+```{r}
+# 4c. Use the function you wrote and a for loop to create a vector of sequence types for the values in sequences  
+
+# create empty vector 
+results <-  vector("character", length(sequences))
+
+for (i in 1:length(sequences)) { 
+  results[i] <- dna_or_rna(sequences[i])
+} 
+
+# print output 
+results 
+```
+
+```{r}
+# 4d. Use the function and a for loop to create a data frame that includes a column of sequences and a column of their types. 
+
+# create empty df
+results_dataframe <- data.frame(type = vector("character", length(sequences)), 
+                                sequence = vector("character", length(sequences)
+                                )) 
+
+# for loop 
+for (i in 1:length(sequences)) { 
+  results_dataframe$sequence[i] <- sequences[i] 
+  results_dataframe$type[i] <- dna_or_rna(sequences[i])
+} 
+
+results_dataframe
+```
+
+```{r}
+# 4e. This time, instead of using the function, place the if-else portion of your function directly into the for loop. Modify the code so that it successfully creates the same output as (d) above. Remember to "reset" the data frame that will hold the output so it is empty before you start your loop. 
+
+# create empty df
+results_dataframe <- data.frame(type = vector("character", length(sequences)), 
+                                sequence = vector("character", length(sequences)
+                                )) 
+ 
+# for loop with if else statement inside 
+for (i in 1:length(sequences)) { 
+  # put sequences in column
+  results_dataframe$sequence[i] <- sequences[i]  
+  # if else portion of function 
+  if (str_detect(sequences[i], "u")) {
+    result <- "RNA" 
+  } else if (str_detect(sequences[i], "t")) {
+    result <- "DNA" 
+  } else {
+    result  <- "UNKNOWN"
+  }
+  results_dataframe$type[i] <- result
+  }
+
+results_dataframe
+```
 
 ```{r}
 seq_df <- as.data.frame(sequences)
