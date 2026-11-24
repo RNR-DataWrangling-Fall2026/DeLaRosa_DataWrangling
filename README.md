@@ -29,3 +29,11 @@ Week 12: Making Choices
 - code: contains assignment
 
 - data: contains csv files
+
+Week 13: Iterations
+
+- code: contains assignment
+
+  - individual collar data
+
+- data: contains assignment
